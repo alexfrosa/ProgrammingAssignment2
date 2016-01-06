@@ -1,32 +1,28 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## This function create a R object to store values and has some methods to set and get values.
-
-makeVector <- function(x = numeric()) {
-  m <- NULL
+# Creates a object to store data and methods to access and set the data stored
+makeCacheMatrix <- function(x = matrix()) {
+  s <- NULL
   set <- function(y) {
-    x <<- y
-    m <<- NULL
+    x <<- matrix(y, nrow=2, ncol=2)
+    s <<- NULL
   }
-  get <- function() x
-  setmean <- function(mean) m <<- mean
-  getmean <- function() m
+  get <- function() matrix(x, nrow=2, ncol=2)
+  setsolve <- function(solve) s <<- solve
+  getsolve <- function() s
   list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
-## This function computes the matrix inverse using solve, if it is already computed it gets the value from the makeVector object created previously.
-
-cachemean <- function(x, ...) {
-  m <- x$getmean()
-  if(!is.null(m)) {
+# Create a function that get a makeCacheMatrix object and cache the result of the matrix inverse.
+# If the result is cached, it get it from the makeCacheMatrix object instantiated
+cacheSolve <- function(x, ...) {
+  s <- x$getsolve()
+  if(!is.null(s)) {
     message("getting cached data")
-    return(m)
+    return(s)
   }
   data <- x$get()
-  m <- mean(data, ...)
-  x$setmean(m)
-  m
+  s <- solve(data, ...)
+  x$setsolve(s)
+  s
 }
